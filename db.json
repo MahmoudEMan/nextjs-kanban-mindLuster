@@ -1,0 +1,76 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Set up project",
+      "description": "Init repo, install deps, configure linting",
+      "column": "done"
+    },
+    {
+      "id": 2,
+      "title": "Design database schema",
+      "description": "ERD for main entities and relationships",
+      "column": "done"
+    },
+    {
+      "id": 3,
+      "title": "Build REST API",
+      "description": "CRUD endpoints for tasks resource",
+      "column": "in_progress"
+    },
+    {
+      "id": 4,
+      "title": "Implement auth",
+      "description": "JWT login, refresh tokens, protected routes",
+      "column": "in_progress"
+    },
+    {
+      "id": 5,
+      "title": "Write unit tests",
+      "description": "Cover service layer and custom hooks",
+      "column": "review"
+    },
+    {
+      "id": 6,
+      "title": "Set up CI pipeline",
+      "description": "GitHub Actions for lint, test and build",
+      "column": "review"
+    },
+    {
+      "id": 7,
+      "title": "Add error boundaries",
+      "description": "Handle async failures gracefully across app",
+      "column": "in_progress"
+    },
+    {
+      "id": 8,
+      "title": "Accessibility audit",
+      "description": "WCAG 2.1 AA compliance check",
+      "column": "backlog"
+    },
+    {
+      "id": 9,
+      "title": "Performance profiling",
+      "description": "Lighthouse scores and bundle analysis",
+      "column": "in_progress"
+    },
+    {
+      "id": 10,
+      "title": "Documentation",
+      "description": "README, API docs and component storybook",
+      "column": "in_progress"
+    },
+    {
+      "id": 11,
+      "title": "Dark mode support",
+      "description": "Add theme toggle and CSS variable switching",
+      "column": "in_progress"
+    },
+    {
+      "id": 12,
+      "title": "Notification system",
+      "description": "Toast notifications and in-app alerts",
+      "column": "backlog"
+    }
+  ]
+}
