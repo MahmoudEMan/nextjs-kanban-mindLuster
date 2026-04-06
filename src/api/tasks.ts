@@ -1,30 +1,41 @@
-import { http } from "./http";
-import type { FetchTasksParams, Task, TasksPage } from "@/types";
+import { storage } from '@/lib/storage'
+import type { FetchTasksParams, Task, TasksPage } from '@/types'
 
 export async function fetchTasks({
   column,
   page = 1,
-  search = "",
+  search = '',
   limit = 8,
 }: FetchTasksParams): Promise<TasksPage> {
-  const params = new URLSearchParams({
-    column,
-    _page: String(page),
-    _limit: String(limit),
-  });
-  if (search.trim()) params.set("q", search.trim());
+  let tasks = storage.getByColumn(column)
 
-  const { data, headers } = await http.getWithHeaders<Task[]>(
-    `/tasks?${params}`,
-  );
-  const total = Number(headers.get("X-Total-Count") ?? 0);
-  return { data, total };
+  if (search.trim()) {
+    const q = search.trim().toLowerCase()
+    tasks = tasks.filter(
+      (t) =>
+        t.title.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q),
+    )
+  }
+
+  const total = tasks.length
+  const start = (page - 1) * limit
+  const data = tasks.slice(start, start + limit)
+
+  return { data, total }
 }
 
-export const createTask = (task: Omit<Task, "id">) =>
-  http.post<Task>("/tasks", task);
+export async function createTask(task: Omit<Task, 'id'>): Promise<Task> {
+  return storage.create(task)
+}
 
-export const updateTask = (id: number, patch: Partial<Omit<Task, "id">>) =>
-  http.patch<Task>(`/tasks/${id}`, patch);
+export async function updateTask(
+  id: number,
+  patch: Partial<Omit<Task, 'id'>>,
+): Promise<Task> {
+  return storage.update(id, patch)
+}
 
-export const deleteTask = (id: number) => http.delete(`/tasks/${id}`);
+export async function deleteTask(id: number): Promise<void> {
+  storage.delete(id)
+}
