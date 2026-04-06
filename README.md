@@ -1,62 +1,43 @@
 # Kanban Board — Next.js
 
-Kanban-style task manager built with Next.js 14 App Router, Zustand, React Query, Material UI, and dnd-kit.
+A kanban-style task manager built with Next.js App Router. No backend required — all data is stored in `localStorage` with seed tasks on first load, making it instantly deployable on Vercel.
+
+> **Note:** This is a frontend-only demo — no backend required. Tasks are persisted in `localStorage` and seeded automatically on first load. You can deploy it directly to Vercel with zero configuration.
 
 ## Stack
 
-- **Next.js 14** (App Router)
+- **Next.js 15** (App Router)
 - **Zustand** — UI state (search, dialogs, drag overlay)
-- **React Query** — server state, caching, infinite scroll
+- **React Query** — data fetching, caching, infinite scroll
 - **MUI v5** — components and layout
 - **@dnd-kit** — drag and drop
-- **json-server** — mock REST API
+- **localStorage** — client-side persistence (no backend)
 
 ## Getting started
 
-### 1. Install dependencies
-
 ```bash
 npm install
-```
-
-### 2. Start the mock API
-
-```bash
-npm run api
-# runs json-server on http://localhost:4000
-```
-
-### 3. Start the dev server
-
-```bash
 npm run dev
 # runs on http://localhost:3000
 ```
 
-Both servers need to be running at the same time.
+No second server needed.
 
 ## Project structure
 
 ```
 src/
-├── api/          # fetch wrappers
-├── app/          # Next.js App Router
-│   ├── layout.jsx
-│   ├── page.jsx
-│   └── providers.jsx   # QueryClient + MUI ThemeProvider (client boundary)
+├── api/
+│   └── tasks.ts        # CRUD functions (delegates to localStorage)
+├── lib/
+│   └── storage.ts      # localStorage read/write with seed data
+├── app/                # Next.js App Router (layout, page, providers)
 ├── components/
-│   ├── Board/    # Board + BoardColumn
-│   └── Task/     # TaskCard + TaskDialog
-├── hooks/        # useTasks + useTaskMutations
-└── store/        # Zustand store
-db.json           # json-server seed data
+│   ├── Board/          # Board + BoardColumn
+│   └── Task/           # TaskCard + TaskDialog
+├── hooks/              # useTasks + useTaskMutations (React Query)
+└── store/              # Zustand store
 ```
-
-## Notes on Next.js App Router
-
-All interactive components are Client Components (`'use client'`). Data fetching happens client-side via React Query — not via Server Components — to keep the cache shared across all four columns.
-
-`providers.jsx` instantiates `QueryClient` inside `useState` to prevent a shared instance across server renders.
 
 ## Features
 
@@ -65,4 +46,11 @@ All interactive components are Client Components (`'use client'`). Data fetching
 - Drag and drop between columns (optimistic update)
 - Infinite scroll per column (8 tasks/page)
 - Debounced search across title and description
-- React Query caching with 30s stale time
+- Data persists across page refreshes via `localStorage`
+- Ships with 10 seed tasks on first load
+
+## Notes on Next.js App Router
+
+All interactive components are Client Components (`'use client'`). Data fetching happens client-side via React Query — not Server Components — so the cache is shared across all four columns.
+
+`providers.tsx` instantiates `QueryClient` inside `useState` to prevent a shared instance across server renders.
